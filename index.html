@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	body {
+    font-size: 75%;
+    font-family:"Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+#body {
+    clear: both;
+    margin: 0 auto;
+    max-width: 534px;
+}
+tbody {
+    border-color: #1c44d561;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-top: 0.75em;
+    border: 0 none;
+    margin-top:35px;
+}
+#body td {
+    padding:15px 30px 15px 10px;
+}
+#body tr td:nth-child(1) {
+    font-weight:bold;
+}
+#address {
+    width:400px;
+}
+.main {
+    width: 25%;
+    margin: 40px auto;
+}
+button.show {
+    width: 20%;
+}
+input#name {
+	margin-top: 20px;
+    width: 75%;
+}
+.container {
+    background-color: #4ce1d4;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+        $("#body").hide();
+    $(".show").click(function(){
+
+       var name = $('#name').val();
+       callback(name);
+      console.log('name val',name);
+        $("#body").show();
+    });
+});
+
+function callback(name){
+	 $('#address').text("");
+    $('#latitude').text("");
+    $('#longitude').text("");
+var geocodingAPI = "https://api.github.com/users/"+name+"/repos";
+$.getJSON(geocodingAPI, function (json) {
+    // Set the variables from the results array
+    console.log(json);
+    var address = json[1].html_url;
+    console.log('Address : ', address);
+    
+    var latitude = json[2].html_url;
+    console.log('Latitude : ', latitude);
+    
+    var longitude = json[3].html_url;
+    console.log('Longitude : ', longitude);
+
+   // Set the table td text
+    $('#address').text(address);
+    $('#latitude').text(latitude);
+    $('#longitude').text(longitude);
+});
+
+// Caching the link jquery object
+var $myLink = $('a.myLink');
+
+// Set the links properties
+$myLink.prop({
+    href: geocodingAPI,
+    title: 'Click on this link to open in a new window.'
+}).click(function (e) {
+    e.preventDefault();
+    window.open(this.href, '_blank');
+});
+
+}
+
+</script>
+</head>
+<body>
+<div class="container">
+	<div  class="main">   
+	<input type='text' id='name' name='name' />
+	<button class="show">Show</button>
+	</div>
+	<div id="body">
+	    <table border="1">
+	        <tr>
+	            <td>Url:</td>
+	            <td><a class="myLink">The Github Repository API</a> 
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>Repository:</td>
+	            <td id="address"></td>
+	        </tr>
+	        <tr>
+	            <td>Repository1:</td>
+	            <td id="latitude"></td>
+	        </tr>
+	        <tr>
+	            <td>Repository2:</td>
+	            <td id="longitude"></td>
+	        </tr>
+	    </table>
+	</div>
+</div>
+</body>
+</html>
